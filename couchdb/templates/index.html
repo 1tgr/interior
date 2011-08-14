@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My New CouchApp</title>
+    <script>
+var data = @@DATA@@;
+    </script>
+    <script src="http://code.jquery.com/jquery-1.6.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.8.16/jquery-ui.min.js"></script>
+    <script src="json2.js"></script>
+    <script src="jquery.couch.js"></script>
+    <script src="jquery.tmpl.js"></script>
+    <script src="knockout-1.2.1.js"></script>
+    <script src="knockout.mapping-latest.js"></script>
+    <script src="knockout-jquery-ui-widget.js"></script>
+    <script src="common.js"></script>
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.16/themes/pepper-grinder/jquery-ui.css" type="text/css">
+    <link rel="stylesheet" href="style/main.css" type="text/css">
+  </head>
+  <body>
+    <div class="ui-widget">
+        <p>
+            <a href="#">[Home]</a>
+        </p>    
+        <h1>Interior Design App</h1>
+    </div>    
+    <div id="items" class="ui-widget ui-widget-content ui-corner-all ui-state-default">
+        <ul data-bind="template: { name: 'planTemplate' }"></ul>
+    </div>
+    <script type="text/html" id="planTemplate">
+        {{each plans}}
+        <li>
+            <a href="plan/${_id}">${title}</a>
+        </li>
+        {{/each}}
+        <li>  
+            <form data-bind="submit: addPlan">
+                Add plan: <input type="text" data-bind="value: addPlanTitle">
+                <button type="submit" data-bind="enabled: addPlanEnabled, jqueryui: { widget: 'button', options: { icons: { primary: 'ui-icon-disk' } } }">Add</button>
+            </form>
+        </li>
+    </script>
+    <div id="sidebar" class="ui-widget ui-widget-content ui-state-defaeult ui-corner-all">
+        <ul>
+            <li>Edit welcome message.</li>
+        </ul>
+    </div>
+  </body>
+</html>

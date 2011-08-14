@@ -1,0 +1,18 @@
+[
+    {
+        "from": "",
+        "to": "_list/index/plan",
+        "query": { "group": "true" },
+        "format": { "group": "string" }
+    },
+    {
+        "from": "plan/:planId",
+        "to": "_list/plan/plan",
+        "query": { "key": ":planId", "group": "true" },
+        "format": { "key": "string", "group": "string" }
+    },
+    {
+        "from": "*",
+        "to": "*"
+    }
+]

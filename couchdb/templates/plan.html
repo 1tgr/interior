@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Plan</title>
+    <script>
+var data = @@DATA@@;
+    </script>
+    <script src="http://code.jquery.com/jquery-1.6.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.8.16/jquery-ui.min.js"></script>
+    <script src="../json2.js"></script>
+    <script src="../jquery.couch.js"></script>
+    <script src="../jquery.form.js"></script>
+    <script src="../jquery.tmpl.js"></script>
+    <script src="../knockout-1.2.1.js"></script>
+    <script src="../knockout.mapping-latest.js"></script>
+    <script src="../knockout-jquery-ui-widget.js"></script>
+    <script src="../common.js"></script>
+    <script src="../plan.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.16/themes/pepper-grinder/jquery-ui.css" type="text/css">
+    <link rel="stylesheet" href="../style/main.css" type="text/css">
+  </head>
+  <body>
+    <p class="ui-widget">
+        <a href="../">[Home]</a>
+        <h1 data-bind="text: title"></h1>
+    </p>    
+    <div id="items" class="ui-widget">
+        <div data-bind="jqueryui: 'tabs'">
+            <ul>
+                <li><a href="#addLink">Add Link</a></li>
+                <li><a href="#addText">Add Note</a></li>
+                <li><a href="#addAttachment">Add Attachment</a></li>
+            </ul>
+            <div id="addLink">
+                <form action data-bind="submit: addLink">
+                    <input type="text" data-bind="value: addLinkValue">
+                    <button type="submit" data-bind="jqueryui: { widget: 'button', options: { icons: { primary: 'ui-icon-link' } } }">Add Link</button>
+                </form>
+            </div>
+            <div id="addText">
+                <form action data-bind="submit: addText">
+                    <textarea data-bind="value: addTextValue"></textarea>
+                    <button type="submit" data-bind="jqueryui: { widget: 'button', options: { icons: { primary: 'ui-icon-note' } } }">Add Note</button>
+                </form>
+            </div>
+            <div id="addAttachment">
+                <form action method="post" data-bind="submit: uploadAttachment">
+                    <input type="hidden" name="_rev" data-bind="value: _rev">
+                    <input type="file" name="_attachments">
+                    <button type="submit" data-bind="jqueryui: { widget: 'button', options: { icons: { primary: 'ui-icon-image' } } }">Upload Attachment</button>
+                    <span data-bind="visible: uploading">Uploading...</span>
+                </form>
+            </div>
+        </div>
+        <ul id="notes" class="ui-widget-content ui-state-default ui-corner-all" data-bind="template: { name: 'noteTemplate' }"></ul>
+        <ul id="attachments" class="ui-widget-content ui-state-default ui-corner-all" data-bind="template: { name: 'attachmentTemplate', foreach: attachments }"></ul>
+    </div>
+    <script type="text/html" id="noteTemplate">
+        <div style="clear: both"></div>
+        {{each notes}}
+        <li style="clear:both">
+            <ul class="buttons">    
+                <li><button data-bind="click: edit, jqueryui: { widget: 'button', options: { icons: { primary: 'ui-icon-pencil' } } }">Edit</button></li>
+                <li><button data-bind="click: deleteNote, jqueryui: { widget: 'button', options: { icons: { primary: 'ui-icon-trash' } } }">Delete</button></li>
+            </ul>
+            <a data-bind="visible: hasLink" href="${link}">${title}</a>
+            <div data-bind="visible: hasText">
+                <p><a href="../note/${_id}">${title}</a></p>
+                <p>${text}</p>
+            </div>    
+        </li>
+        {{/each}}
+        <div style="clear: both"></div>
+    </script>
+    <script type="text/html" id="attachmentTemplate">
+        <li>${id} <button data-bind="click: deleteAttachment, jqueryui: 'button'">Delete</button></li>
+    </script>
+    <div id="sidebar" class="ui-widget ui-widget-content ui-corner-all">
+        <ul class="buttons">
+            <li>Id: <span data-bind="text: _id"></span></li>
+            <li>Revision: <span data-bind="text: _rev"></span></li>
+            <li><button data-bind="click: edit, jqueryui: { widget: 'button', options: { icons: { primary: 'ui-icon-pencil' } } }">Edit</button></li>
+            <li><button data-bind="click: deletePlan, jqueryui: { widget: 'button', options: { icons: { primary: 'ui-icon-trash' } } }">Delete</button></li>
+        </ul>
+    </div>
+    <div id="editPlanDialog" data-bind="jqueryui: { widget: 'dialog', options: { title: 'Edit Plan', autoOpen: false } }">
+        <form data-bind="submit: save">
+            Title: <input type="text" data-bind="value: editPlan.title">
+            <button type="submit">Save</button>
+        </form>    
+    </div>
+    <div id="editNoteDialog" data-bind="jqueryui: { widget: 'dialog', options: { title: 'Edit Note', autoOpen: false } }">
+        <form data-bind="submit: editNote.save">
+            Title: <input type="text" data-bind="value: editNote.title">
+            <button type="submit">Save</button>
+        </form>    
+    </div>
+  </body>
+</html>
